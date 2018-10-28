@@ -10,17 +10,33 @@ socket.on("disconnect", function () {
 
 socket.on("newMessage", function (message) {
     var formattedTime = moment(message.createdAt).format("h:mm a")
-    var li = $("<li></li>")
-    li.text(`${message.from} - ${formattedTime}: ${message.text}`)
-    console.log(message)
+    // var li = $("<li></li>")
+    // li.text(`${message.from} - ${formattedTime}: ${message.text}`)
+    // console.log(message)
 
-    $("#messages").append(li)
+    // $("#messages").append(li)
+
+    var template = $("#message-template").html()
+    var html = Mustache.render(template, {
+        text: message.text,
+        from: message.from,
+        createdAt: formattedTime
+    })
+
+    $("#messages").append(html)
 })
 
 socket.on("newLocationMessage", function (coords) {
     var formattedTime = moment(coords.createdAt).format("h:mm a")
-    var li = $(`<li>${coords.from} - ${formattedTime}: <a href=${coords.url}>Click here</></li>`)
-    $("#messages").append(li)
+    // var li = $(`<li>${coords.from} - ${formattedTime}: <a href=${coords.url}>Click here</></li>`)
+    // $("#messages").append(li)
+    var template = $("#location-message-template").html()
+    var html = Mustache.render(template, {
+        url: coords.url,
+        from: coords.from,
+        createdAt: formattedTime
+    })
+    $("#messages").append(html)
 })
 
 socket.emit("createMessage", {
@@ -55,7 +71,6 @@ locationButton.on("click", function () {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
         })
-        $locationButton.attr("disabled", true)
     }, function () {
         $(locationButton.removeAttr("disabled")).text("Send location")
         alert("Unable to fetch location")
