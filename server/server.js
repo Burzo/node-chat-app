@@ -32,7 +32,8 @@ io.on("connection", (socket) => {
 })
 
 
-app.get("/", ((req, res) => {
+app.get("/a", ((req, res) => {
+    console.log(req.secure + "-------");
     res.sendFile(publicPath+"/index.html")
 }))
 
