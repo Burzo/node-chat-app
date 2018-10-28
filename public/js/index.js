@@ -16,6 +16,11 @@ socket.on("newMessage", function (message) {
     $("#messages").append(li)
 })
 
+socket.on("newLocationMessage", function (coords) {
+var li = $(`<li>${coords.from}: <a href=${coords.url}>Click here</></li>`)
+    $("#messages").append(li)
+})
+
 socket.emit("createMessage", {
     from: "Burzo!!",
     text: "HI!!"
@@ -40,7 +45,10 @@ locationButton.on("click", function () {
         return alert("Geolocation not supported by your browser.")
     }
     navigator.geolocation.getCurrentPosition(function (position) {
-        console.log(position)
+        socket.emit("createLocationMessage", {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        })
     }, function () {
         alert("Unable to fetch location")
     })
