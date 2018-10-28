@@ -9,13 +9,27 @@ socket.on("disconnect", function () {
 })
 
 socket.on("newMessage", function (message) {
+    var li = $("<li></li>")
+    li.text(`${message.from}: ${message.text}`)
     console.log(message)
+
+    $("#messages").append(li)
 })
 
-// socket.on("newUser", function (message) {
-//     console.log(message)
-// })
+socket.emit("createMessage", {
+    from: "Burzo!!",
+    text: "HI!!"
+}, function(data) {
+    console.log(data)
+})
 
-// socket.on("adminMessage", function (message) {
-//     console.log(message)
-// })
+$("#message-form").on("submit", function(e) {
+    e.preventDefault()
+
+    socket.emit("createMessage", {
+        from:"user",
+        text: $("[name=message]").val()
+    }, function () {
+
+    })
+})
