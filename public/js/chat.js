@@ -16,7 +16,16 @@ function scrollToBottom () {
 }
 
 socket.on("connect", function () {
-    console.log("Connected to server.")
+    var params = $.deparam(window.location.search)
+
+    socket.emit("join", params, function (err) {
+        if (err) {
+            alert(err)
+            window.location.href = "/"
+        } else {
+            console.log("No error")
+        }
+    })
 })
 
 socket.on("disconnect", function () {
@@ -54,13 +63,6 @@ socket.on("newLocationMessage", function (coords) {
     })
     $("#messages").append(html)
     scrollToBottom()
-})
-
-socket.emit("createMessage", {
-    from: "Burzo!!",
-    text: "HI!!"
-}, function(data) {
-    console.log(data)
 })
 
 $("#message-form").on("submit", function(e) {
