@@ -26,8 +26,9 @@ io.on("connection", (socket) => {
         }
         socket.join(params.room)
         users.removeUser(socket.id)
+        //console.log(users)
         users.addUser(socket.id, params.name, params.room)
-
+        //console.log(users)
         io.to(params.room).emit("updateUserList", users.getUserList(params.room))
 
         socket.emit("newMessage", generateMessage("Admin", "Welcome to the chat app."))
@@ -38,8 +39,12 @@ io.on("connection", (socket) => {
     })
 
     socket.on("createMessage", (message, callback) => {
-        console.log("createMessage", message)
-        io.emit("newMessage", generateMessage(message.from, message.text))
+        var user = users.getUser(socket.id)
+
+        if (user && isRealString(message.text)) {
+            io.to(user.room).emit("newMessage", generateMessage(user.name, message.text))
+        }
+
         callback()
     })
 
@@ -50,6 +55,7 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         var user = users.removeUser(socket.id)
         if (user) {
+            console.log("REMOVING", user)
             io.to(user.room).emit("updateUserList", users.getUserList(user.room))
             io.to(user.room).emit("New message", generateMessage("Admin", `${user.name} has left the chat room.`))
         }
