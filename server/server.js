@@ -36,10 +36,5 @@ io.on("connection", (socket) => {
     })
 })
 
-
-app.get("/", ((req, res) => {
-    res.sendFile(publicPath+"/index.html")
-}))
-
 server.listen(port, () => {console.log(`--- SERVER IS UP ON PORT ${port} ---`)})
 
