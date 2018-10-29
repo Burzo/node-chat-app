@@ -29,21 +29,21 @@ class Users {
     }
 }
 
-var user = new Users()
+// var user = new Users()
 
-user.addUser("123","burzo", "roomeone")
-user.addUser("456","burzo2", "roomeone")
-user.addUser("789","burzo3", "roometwo")
-user.addUser("145","burzo4", "roometwo")
+// user.addUser("123","burzo", "roomeone")
+// user.addUser("456","burzo2", "roomeone")
+// user.addUser("789","burzo3", "roometwo")
+// user.addUser("145","burzo4", "roometwo")
 
-console.log(user.users)
-console.log("\n\n")
+// console.log(user.users)
+// console.log("\n\n")
 
-console.log(user.getUser("456"))
-console.log("\n\n")
+// console.log(user.getUser("456"))
+// console.log("\n\n")
 
-user.removeUser("456")
+// user.removeUser("456")
 
-console.log(user.users)
+// console.log(user.users)
 
 module.exports = {Users}
