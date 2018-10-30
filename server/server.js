@@ -26,9 +26,10 @@ io.on("connection", (socket) => {
         }
         socket.join(params.room)
         users.removeUser(socket.id)
-        //console.log(users)
+        console.log(users)
         users.addUser(socket.id, params.name, params.room)
-        //console.log(users)
+        console.log(users.getUserList(params.room))
+
         io.to(params.room).emit("updateUserList", users.getUserList(params.room))
 
         socket.emit("newMessage", generateMessage("Admin", "Welcome to the chat app."))
@@ -49,7 +50,9 @@ io.on("connection", (socket) => {
     })
 
     socket.on("createLocationMessage", (coords) => {
-            io.emit("newLocationMessage", generateLocationMessage("Admin", coords.latitude, coords.longitude))
+        var user = users.getUser(socket.id)
+        io.to(user.room).emit("newLocationMessage", generateLocationMessage(user.name, coords.latitude, coords.longitude))
+
     })
 
     socket.on("disconnect", () => {

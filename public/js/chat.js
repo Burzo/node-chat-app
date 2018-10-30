@@ -19,6 +19,7 @@ socket.on("connect", function () {
     var params = $.deparam(window.location.search)
 
     socket.emit("join", params, function (err) {
+        console.log("I EMIT")
         if (err) {
             alert(err)
             window.location.href = "/"
@@ -34,21 +35,14 @@ socket.on("disconnect", function () {
 
 socket.on("updateUserList", function(users) {
     var ol = $("<ol></ol>")
-    console.log("----------------------", users)
     users.forEach(function(user) {
-        ol.append($("<li><li/>").text(user))
+        ol.append($("<li></li>").text(user))
     });
-    console.log(ol)
     $("#users").html(ol)
 })
 
 socket.on("newMessage", function (message) {
     var formattedTime = moment(message.createdAt).format("h:mm a")
-    // var li = $("<li></li>")
-    // li.text(`${message.from} - ${formattedTime}: ${message.text}`)
-    // console.log(message)
-
-    // $("#messages").append(li)
 
     var template = $("#message-template").html()
     var html = Mustache.render(template, {
@@ -63,8 +57,7 @@ socket.on("newMessage", function (message) {
 
 socket.on("newLocationMessage", function (coords) {
     var formattedTime = moment(coords.createdAt).format("h:mm a")
-    // var li = $(`<li>${coords.from} - ${formattedTime}: <a href=${coords.url}>Click here</></li>`)
-    // $("#messages").append(li)
+
     var template = $("#location-message-template").html()
     var html = Mustache.render(template, {
         url: coords.url,
